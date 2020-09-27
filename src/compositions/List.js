@@ -5,7 +5,7 @@ import "./List.css";
 function List(props) {
   const { header, cards } = props;
 
-  const cardsJSX = cards.map((card, index) => (
+  const cardsJSX = cards?.map((card, index) => (
     <Card title={card.title} content={card.content} key={card.id} />
   ));
 
