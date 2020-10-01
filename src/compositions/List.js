@@ -1,13 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "./Card";
 import "./List.css";
 
 function List(props) {
-  const { header, cards } = props;
+  const { header, allCards, random, add } = props;
+  const [cardIds, setCardIds] = useState(props.cardIds);
 
-  const cardsJSX = cards?.map((card, index) => (
-    <Card title={card.title} content={card.content} key={card.id} />
-  ));
+  function removeCard(cardId) {
+    setCardIds((cardIds) => cardIds.filter((id) => id !== cardId));
+  }
+
+  function handleAddClick(){
+    const newCard = random();
+    add(newCard);
+    setCardIds(ids=>[...ids,newCard.id])
+  }
+
+  const cards = cardIds?.map((cardId) => {
+    const cardObject = allCards[cardId];
+    return (
+      <Card
+        title={cardObject.title}
+        content={cardObject.content}
+        key={cardObject.id}
+        remove={() => {
+          removeCard(cardObject.id);
+        }}
+      />
+    );
+  });
 
   return (
     <section className="List">
@@ -15,8 +36,12 @@ function List(props) {
         <h2>{header}</h2>
       </header>
       <div className="List-cards">
-        {cardsJSX}
-        <button type="button" className="List-add-button">
+        {cards}
+        <button
+          type="button"
+          className="List-add-button"
+          onClick={handleAddClick}
+        >
           + Add Random Card
         </button>
       </div>
